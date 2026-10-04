@@ -129,6 +129,8 @@ This automatically starts the FastAPI backend on `http://127.0.0.1:8000` and lau
 
 ---
 
+---
+
 ### Option B: Manual Setup
 
 #### 1. Clone the Repository
@@ -171,6 +173,33 @@ npm install
 npm run dev
 ```
 > Open `http://localhost:5173` in your browser.
+
+---
+
+## 🌐 Deploy to Vercel
+
+You can deploy the PingPilot Web Dashboard directly to [Vercel](https://vercel.com):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbhavya277%2FPingPilot)
+
+### Method 1: Via Vercel Web Dashboard (Recommended)
+1. Go to [vercel.com/new](https://vercel.com/new) and import your repository `bhavya277/PingPilot`.
+2. Vercel will automatically detect `vercel.json` and configure:
+   - **Framework Preset**: Vite
+   - **Build Command**: `cd frontend && npm install && npm run build`
+   - **Output Directory**: `frontend/dist`
+3. *(Optional)* If you have a custom backend hosted on a cloud server or tunnel, set the environment variable:
+   - `VITE_API_BASE`: `https://your-backend-domain.com/api`
+4. Click **Deploy**.
+
+> **Note on Web/Vercel Preview**: When running in the cloud on Vercel without a local desktop backend connected, PingPilot automatically activates its **Interactive Demo & Simulation Engine**, allowing anyone to test live-feel scenarios (Valorant Wi-Fi jitter, CS2 route loss, Apex fiber) and review AI reports directly in the browser!
+
+### Method 2: Via Vercel CLI
+```bash
+npm install -g vercel
+vercel
+```
+
 
 ---
 
