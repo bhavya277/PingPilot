@@ -1,4 +1,4 @@
-# 🚀 PingPilot
+# PingPilot
 
 > **Local-First AI Network Diagnostic Co-Pilot for Gamers & Esports Enthusiasts**
 
