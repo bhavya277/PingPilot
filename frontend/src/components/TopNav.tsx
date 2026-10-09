@@ -1,7 +1,8 @@
 import React from "react";
-import { Cpu, Network, Play, Settings as SettingsIcon, Menu } from "lucide-react";
+import { Cpu, Network, Play, Settings as SettingsIcon, Menu, Sun, Moon } from "lucide-react";
 import type { SystemInfo } from "../types/diagnostics";
 import type { NavTab } from "./Sidebar";
+import { useAppearance } from "../context/AppearanceContext";
 
 interface TopNavProps {
   activeTab: NavTab;
@@ -20,7 +21,14 @@ export const TopNav: React.FC<TopNavProps> = ({
   onQuickDiagnose,
   onToggleMobileMenu
 }) => {
+  const { resolvedTheme, setTheme } = useAppearance();
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
+
   const isAiOnline = systemInfo?.ollama_online ?? false;
+
 
   const tabTitles: Record<NavTab, { title: string; subtitle: string }> = {
     overview: {
@@ -104,6 +112,20 @@ export const TopNav: React.FC<TopNavProps> = ({
           </button>
         )}
 
+        {/* Theme quick toggle */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="p-1.5 rounded text-[#94A3B8] hover:text-[#F3F4F6] hover:bg-[#171B21] transition-colors"
+          title={`Switch to ${resolvedTheme === "dark" ? "Light" : "Dark"} theme`}
+        >
+          {resolvedTheme === "dark" ? (
+            <Sun className="w-4 h-4" />
+          ) : (
+            <Moon className="w-4 h-4" />
+          )}
+        </button>
+
         {/* Settings button */}
         <button
           type="button"
@@ -121,3 +143,4 @@ export const TopNav: React.FC<TopNavProps> = ({
     </header>
   );
 };
+

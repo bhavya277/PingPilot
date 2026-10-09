@@ -19,6 +19,20 @@
     --status-info: #3B82F6;
   }
 
+  html.light {
+    color-scheme: light;
+    --bg-base: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #F1F5F9;
+    --bg-surface-hover: #E2E8F0;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-strong: rgba(0, 0, 0, 0.16);
+    
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+  }
+
   body {
     background-color: #0B0D10;
     color: #F3F4F6;
@@ -26,6 +40,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   code, kbd, samp, pre {
@@ -100,4 +115,237 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #333C4D;
+}
+
+/* ==========================================================================
+   Light Mode Theme Styling Overrides
+   ========================================================================== */
+html.light body,
+html.light .bg-\[\#0B0D10\],
+html.light [class*="bg-[#0B0D10]"] {
+  background-color: #F8FAFC !important;
+}
+
+html.light .bg-\[\#111418\],
+html.light [class*="bg-[#111418]"] {
+  background-color: #FFFFFF !important;
+}
+
+html.light .bg-\[\#171B21\],
+html.light [class*="bg-[#171B21]"] {
+  background-color: #F1F5F9 !important;
+}
+
+html.light .bg-\[\#171B21\]\/60,
+html.light [class*="bg-[#171B21]/60"] {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+html.light .bg-\[\#171B21\]\/50,
+html.light [class*="bg-[#171B21]/50"] {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+html.light .bg-\[\#1E232B\],
+html.light [class*="bg-[#1E232B]"],
+html.light .bg-\[\#202631\],
+html.light [class*="bg-[#202631]"] {
+  background-color: #E2E8F0 !important;
+}
+
+/* Hover background states in light mode */
+html.light .hover\:bg-\[\#171B21\]:hover,
+html.light [class*="hover:bg-[#171B21]"]:hover {
+  background-color: #E2E8F0 !important;
+}
+
+html.light .hover\:bg-\[\#1E232B\]:hover,
+html.light [class*="hover:bg-[#1E232B]"]:hover,
+html.light .hover\:bg-\[\#293240\]:hover,
+html.light [class*="hover:bg-[#293240]"]:hover {
+  background-color: #CBD5E1 !important;
+}
+
+html.light .hover\:bg-\[\#171B21\]\/50:hover,
+html.light [class*="hover:bg-[#171B21]/50"]:hover {
+  background-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+/* Text colors in light mode */
+html.light .text-\[\#F3F4F6\],
+html.light [class*="text-[#F3F4F6]"] {
+  color: #0F172A !important;
+}
+
+html.light .text-\[\#94A3B8\],
+html.light [class*="text-[#94A3B8]"] {
+  color: #475569 !important;
+}
+
+html.light .text-\[\#64748B\],
+html.light [class*="text-[#64748B]"] {
+  color: #64748B !important;
+}
+
+html.light .hover\:text-\[\#F3F4F6\]:hover,
+html.light [class*="hover:text-[#F3F4F6]"]:hover,
+html.light .hover\:text-white:hover,
+html.light [class*="hover:text-white"]:hover {
+  color: #0F172A !important;
+}
+
+html.light .hover\:text-\[\#94A3B8\]:hover,
+html.light [class*="hover:text-[#94A3B8]"]:hover {
+  color: #334155 !important;
+}
+
+/* Borders in light mode */
+html.light .border-\[rgba\(255\,255\,255\,0\.06\)\],
+html.light [class*="border-[rgba(255,255,255,0.06)]"],
+html.light .border-\[rgba\(255\,255\,255\,0\.08\)\],
+html.light [class*="border-[rgba(255,255,255,0.08)]"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .border-\[rgba\(255\,255\,255\,0\.1\)\],
+html.light [class*="border-[rgba(255,255,255,0.1)]"],
+html.light .border-\[rgba\(255\,255\,255\,0\.12\)\],
+html.light [class*="border-[rgba(255,255,255,0.12)]"],
+html.light .border-\[rgba\(255\,255\,255\,0\.14\)\],
+html.light [class*="border-[rgba(255,255,255,0.14)]"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Surface Cards in Light Mode */
+html.light .surface-card {
+  background-color: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+html.light .surface-card-elevated {
+  background-color: #F8FAFC !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .surface-card-interactive {
+  background-color: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+html.light .surface-card-interactive:hover {
+  background-color: #F8FAFC !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Form inputs & options in light mode */
+html.light input:not([type="checkbox"]):not([type="radio"]),
+html.light select,
+html.light textarea {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light input:disabled,
+html.light select:disabled {
+  background-color: #F1F5F9 !important;
+  color: #64748B !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light select option {
+  background-color: #FFFFFF;
+  color: #0F172A;
+}
+
+html.light .badge-neutral {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #475569;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* ==========================================================================
+   Display Density Styling (Standard vs Compact)
+   ========================================================================== */
+html[data-density="compact"] {
+  font-size: 13.5px;
+}
+
+html[data-density="compact"] .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.875rem !important;
+}
+
+html[data-density="compact"] .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.625rem !important;
+}
+
+html[data-density="compact"] .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.5rem !important;
+}
+
+html[data-density="compact"] .gap-4 {
+  gap: 0.625rem !important;
+}
+
+html[data-density="compact"] .gap-6 {
+  gap: 0.875rem !important;
+}
+
+html[data-density="compact"] .p-5 {
+  padding: 0.75rem !important;
+}
+
+html[data-density="compact"] .p-4 {
+  padding: 0.625rem !important;
+}
+
+html[data-density="compact"] .p-6 {
+  padding: 0.875rem !important;
+}
+
+html[data-density="compact"] main {
+  padding: 0.75rem 1rem !important;
+}
+
+html[data-density="compact"] header.h-14 {
+  height: 2.75rem !important;
+}
+
+html[data-density="compact"] aside .p-5 {
+  padding: 0.75rem 1rem !important;
+}
+
+html[data-density="compact"] aside nav.p-3 {
+  padding: 0.5rem 0.75rem !important;
+}
+
+html[data-density="compact"] aside nav button {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+
+html[data-density="compact"] table th,
+html[data-density="compact"] table td {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+html[data-density="compact"] .py-3 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
 }

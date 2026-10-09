@@ -5,9 +5,13 @@ import {
   ShieldCheck,
   Palette,
   RotateCw,
-  Terminal
+  Terminal,
+  Sun,
+  Moon,
+  Monitor
 } from "lucide-react";
 import type { SystemInfo } from "../types/diagnostics";
+import { useAppearance } from "../context/AppearanceContext";
 
 interface SettingsViewProps {
   systemInfo: SystemInfo | null;
@@ -18,15 +22,58 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   systemInfo,
   onRefreshSystemInfo
 }) => {
-  const [pingSamples, setPingSamples] = useState<number>(20);
-  const [packetTimeout, setPacketTimeout] = useState<number>(2);
-  const [tracerouteEnabled, setTracerouteEnabled] = useState<boolean>(true);
-  const [themeSelection, setThemeSelection] = useState<"dark" | "light" | "system">("dark");
-  const [density, setDensity] = useState<"standard" | "compact">("standard");
+  const { theme, resolvedTheme, density, setTheme, setDensity } = useAppearance();
+
+  const [pingSamples, setPingSamples] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("pingpilot_ping_samples");
+      return saved ? Number(saved) : 20;
+    } catch {
+      return 20;
+    }
+  });
+  const [packetTimeout, setPacketTimeout] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("pingpilot_packet_timeout");
+      return saved ? Number(saved) : 2;
+    } catch {
+      return 2;
+    }
+  });
+  const [tracerouteEnabled, setTracerouteEnabled] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("pingpilot_traceroute_enabled");
+      return saved !== null ? saved === "true" : true;
+    } catch {
+      return true;
+    }
+  });
+
+  const handlePingSamplesChange = (val: number) => {
+    setPingSamples(val);
+    try {
+      localStorage.setItem("pingpilot_ping_samples", String(val));
+    } catch {}
+  };
+
+  const handlePacketTimeoutChange = (val: number) => {
+    setPacketTimeout(val);
+    try {
+      localStorage.setItem("pingpilot_packet_timeout", String(val));
+    } catch {}
+  };
+
+  const handleTracerouteToggle = (val: boolean) => {
+    setTracerouteEnabled(val);
+    try {
+      localStorage.setItem("pingpilot_traceroute_enabled", String(val));
+    } catch {}
+  };
 
   const isAiOnline = systemInfo?.ollama_online ?? false;
   const configuredModel = systemInfo?.configured_model || "llama3.2";
   const ollamaHost = systemInfo?.ollama_host || "http://127.0.0.1:11434";
+
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -156,7 +203,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </label>
             <select
               value={pingSamples}
-              onChange={(e) => setPingSamples(Number(e.target.value))}
+              onChange={(e) => handlePingSamplesChange(Number(e.target.value))}
               className="w-full px-3 py-1.5 rounded bg-[#0B0D10] border border-[rgba(255,255,255,0.08)] text-xs text-[#F3F4F6] focus:outline-none focus:border-[#38BDF8]"
             >
               <option value={10}>10 packets (Fast)</option>
@@ -171,7 +218,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </label>
             <select
               value={packetTimeout}
-              onChange={(e) => setPacketTimeout(Number(e.target.value))}
+              onChange={(e) => handlePacketTimeoutChange(Number(e.target.value))}
               className="w-full px-3 py-1.5 rounded bg-[#0B0D10] border border-[rgba(255,255,255,0.08)] text-xs text-[#F3F4F6] focus:outline-none focus:border-[#38BDF8]"
             >
               <option value={1}>1.0 second</option>
@@ -186,7 +233,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </label>
             <select
               value={tracerouteEnabled ? "enabled" : "disabled"}
-              onChange={(e) => setTracerouteEnabled(e.target.value === "enabled")}
+              onChange={(e) => handleTracerouteToggle(e.target.value === "enabled")}
               className="w-full px-3 py-1.5 rounded bg-[#0B0D10] border border-[rgba(255,255,255,0.08)] text-xs text-[#F3F4F6] focus:outline-none focus:border-[#38BDF8]"
             >
               <option value="enabled">Enabled (Max 15 hops)</option>
@@ -237,13 +284,31 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* 4. Appearance */}
       <div className="surface-card rounded-lg p-5 space-y-4">
-        <div className="flex items-center gap-2.5 border-b border-[rgba(255,255,255,0.06)] pb-3">
-          <div className="w-7 h-7 rounded bg-[#171B21] border border-[rgba(255,255,255,0.1)] flex items-center justify-center text-[#94A3B8]">
-            <Palette className="w-3.5 h-3.5" />
+        <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded bg-[#171B21] border border-[rgba(255,255,255,0.1)] flex items-center justify-center text-[#94A3B8]">
+              <Palette className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-[#F3F4F6]">Appearance</h3>
+              <p className="text-[11px] text-[#94A3B8]">Interface theme and visual density</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-sm font-semibold text-[#F3F4F6]">Appearance</h3>
-            <p className="text-[11px] text-[#94A3B8]">Interface theme and visual density</p>
+
+          <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-[#64748B]">
+            <span>
+              Theme:{" "}
+              <span className="text-[#38BDF8] capitalize font-semibold">
+                {theme} {theme === "system" ? `(${resolvedTheme})` : ""}
+              </span>
+            </span>
+            <span>•</span>
+            <span>
+              Density:{" "}
+              <span className="text-[#38BDF8] capitalize font-semibold">
+                {density}
+              </span>
+            </span>
           </div>
         </div>
 
@@ -252,25 +317,32 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <label className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider block">
               Theme
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {[
-                { id: "dark", label: "● Dark (Default)" },
-                { id: "light", label: "○ Light" },
-                { id: "system", label: "○ System" }
-              ].map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setThemeSelection(t.id as any)}
-                  className={`px-3 py-1.5 rounded text-xs transition-colors ${
-                    themeSelection === t.id
-                      ? "bg-[#171B21] text-[#F3F4F6] border border-[rgba(255,255,255,0.14)] font-medium"
-                      : "text-[#64748B] hover:text-[#94A3B8]"
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
+                { id: "dark" as const, title: "Dark", defaultTag: true, icon: Moon },
+                { id: "light" as const, title: "Light", defaultTag: false, icon: Sun },
+                { id: "system" as const, title: "System", defaultTag: false, icon: Monitor }
+              ].map((t) => {
+                const isSelected = theme === t.id;
+                const Icon = t.icon;
+                const radioBullet = isSelected ? "●" : "○";
+                const labelText = `${radioBullet} ${t.title}${t.defaultTag ? " (Default)" : ""}`;
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setTheme(t.id)}
+                    className={`px-3 py-1.5 rounded text-xs transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isSelected
+                        ? "bg-[#171B21] text-[#F3F4F6] border border-[#38BDF8]/50 shadow-sm font-medium"
+                        : "text-[#64748B] hover:text-[#94A3B8] border border-transparent hover:bg-[#171B21]/50"
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isSelected ? "text-[#38BDF8]" : "text-[#64748B]"}`} />
+                    <span>{labelText}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -280,22 +352,25 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </label>
             <div className="flex gap-2">
               {[
-                { id: "standard", label: "Standard" },
-                { id: "compact", label: "Compact" }
-              ].map((d) => (
-                <button
-                  key={d.id}
-                  type="button"
-                  onClick={() => setDensity(d.id as any)}
-                  className={`px-3 py-1.5 rounded text-xs transition-colors ${
-                    density === d.id
-                      ? "bg-[#171B21] text-[#F3F4F6] border border-[rgba(255,255,255,0.14)] font-medium"
-                      : "text-[#64748B] hover:text-[#94A3B8]"
-                  }`}
-                >
-                  {d.label}
-                </button>
-              ))}
+                { id: "standard" as const, label: "Standard" },
+                { id: "compact" as const, label: "Compact" }
+              ].map((d) => {
+                const isSelected = density === d.id;
+                return (
+                  <button
+                    key={d.id}
+                    type="button"
+                    onClick={() => setDensity(d.id)}
+                    className={`px-3.5 py-1.5 rounded text-xs transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-[#171B21] text-[#F3F4F6] border border-[#38BDF8]/50 shadow-sm font-medium"
+                        : "text-[#64748B] hover:text-[#94A3B8] border border-transparent hover:bg-[#171B21]/50"
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
